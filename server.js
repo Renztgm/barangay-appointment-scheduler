@@ -7,6 +7,7 @@ const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(bodyParser.json());
+
 let appointments = []; // Temporary storage for appointments
 
 // POST endpoint to create a new appointment

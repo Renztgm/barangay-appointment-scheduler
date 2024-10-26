@@ -1,26 +1,38 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
+document.getElementById('appointmentForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
 
-const app = express();
-const PORT = process.env.PORT || 5000;
+    const name = document.getElementById('name').value;
+    const service = document.getElementById('service').value;
+    const date = document.getElementById('date').value;
+    const time = document.getElementById('time').value;
 
-app.use(cors());
-app.use(bodyParser.json());
+    const response = await fetch('http://localhost:5000/api/appointments', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name, service, date, time })
+    });
 
-let appointments = []; // Temporary storage for appointments
-
-app.post('/api/appointments', (req, res) => {
-    const { name, service, date, time } = req.body;
-    const newAppointment = { name, service, date, time };
-    appointments.push(newAppointment);
-    res.status(201).json(newAppointment);
+    const newAppointment = await response.json();
+    displayAppointment(newAppointment);
+    this.reset(); // Reset form fields
 });
 
-app.get('/api/appointments', (req, res) => {
-    res.json(appointments);
-});
+// Function to display appointments
+async function fetchAppointments() {
+    const response = await fetch('http://localhost:5000/api/appointments');
+    const appointments = await response.json();
+    appointments.forEach(displayAppointment);
+}
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+// Function to display a single appointment
+function displayAppointment(appointment) {
+    const appointmentsList = document.getElementById('appointmentsList');
+    const li = document.createElement('li');
+    li.textContent = `${appointment.name} - ${appointment.service} on ${appointment.date} at ${appointment.time}`;
+    appointmentsList.appendChild(li);
+}
+
+// Fetch appointments on page load
+fetchAppointments();

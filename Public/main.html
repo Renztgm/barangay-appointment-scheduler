@@ -7,46 +7,18 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
+    <div class="container">
         <h1>Barangay Appointment Scheduler</h1>
-    </header>
-
-    <main>
-        <section id="appointment-form">
-            <h2>Schedule an Appointment</h2>
-            <form id="form">
-                <label for="name">Name:</label>
-                <input type="text" id="name" required>
-
-                <label for="service">Service:</label>
-                <select id="service" required>
-                    <option value="">Select Service</option>
-                    <option value="Registration">Registration</option>
-                    <option value="Certificate Issuance">Certificate Issuance</option>
-                    <option value="Community Meeting">Community Meeting</option>
-                </select>
-
-                <label for="date">Date:</label>
-                <input type="date" id="date" required>
-
-                <label for="time">Time:</label>
-                <input type="time" id="time" required>
-
-                <button type="submit">Schedule Appointment</button>
-            </form>
-            <div id="response-message"></div>
-        </section>
-
-        <section id="appointments">
-            <h2>Your Appointments</h2>
-            <ul id="appointments-list"></ul>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2024 Barangay Appointment Scheduler</p>
-    </footer>
-
+        <form id="appointmentForm">
+            <input type="text" id="name" placeholder="Name" required>
+            <input type="text" id="service" placeholder="Service" required>
+            <input type="date" id="date" required>
+            <input type="time" id="time" required>
+            <button type="submit">Schedule Appointment</button>
+        </form>
+        <h2>Appointments</h2>
+        <ul id="appointmentsList"></ul>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
