@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Schedule</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="employee_css.css">
+</head>
+<body>
+    <header class="bg-primary text-white text-center py-4">
+        <h1>Employee Schedule</h1>
+    </header>
+
+    <div class="hover-area" style="position: fixed; left: 0; top: 0; z-index: 999;">
+        <button id="menu-toggle" class="btn btn-primary">Menu</button>
+    </div>
+
+    <div class="nav-popup" id="nav-popup">
+        <button id="close-popup" class="btn btn-danger btn-sm float-right">X</button>
+        <h4>Navigation</h4>
+        <a href="#" class="d-block">Home</a>
+        <a href="#" class="d-block">Schedule</a>
+        <a href="#" class="d-block">Profile</a>
+        <a href="#" class="d-block">Settings</a>
+        <a href="#" class="d-block">Logout</a>
+    </div>
+
+    <main class="container my-5">
+        <section id="schedule-section">
+            <h2>Your Schedule</h2>
+            <button id="fetch-schedule" class="btn btn-primary mb-3">Check Schedule</button>
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>ID</th> <!-- Include ID column -->
+                        <th>Name</th>
+                        <th>Service</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody id="schedule-list"></tbody>
+            </table>
+            <div id="response-message" class="mt-2"></div>
+        </section>
+    </main>
+
+    <footer class="text-center py-4">
+        <p>&copy; 2024 Barangay Appointment Scheduler</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="employee_script.js"></script>
+    <script>
+        // JavaScript to toggle the navigation pop-up
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            const navPopup = document.getElementById('nav-popup');
+            // Toggle the visibility of the navigation popup
+            if (navPopup.style.left === '0px') {
+                navPopup.style.left = '-200px'; // Hide the popup
+            } else {
+                navPopup.style.left = '0px'; // Show the popup
+            }
+        });
+
+        // JavaScript to close the navigation pop-up
+        document.getElementById('close-popup').addEventListener('click', function() {
+            const navPopup = document.getElementById('nav-popup');
+            navPopup.style.left = '-200px'; // Hide the popup
+        });
+    </script>
+</body>
+</html>

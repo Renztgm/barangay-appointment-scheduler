@@ -1,4 +1,4 @@
-document.getElementById('appointmentForm').addEventListener('submit', async function(e) {
+document.getElementById('form').addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const name = document.getElementById('name').value;
@@ -15,24 +15,20 @@ document.getElementById('appointmentForm').addEventListener('submit', async func
     });
 
     const newAppointment = await response.json();
-    displayAppointment(newAppointment);
-    this.reset(); // Reset form fields
+    document.getElementById('response-message').textContent = `Appointment scheduled: ${newAppointment.name} for ${newAppointment.service} on ${newAppointment.date} at ${newAppointment.time}`;
+    addAppointmentToList(newAppointment); // Call to update the UI
 });
 
-// Function to display appointments
-async function fetchAppointments() {
+async function loadAppointments() {
     const response = await fetch('http://localhost:5000/api/appointments');
     const appointments = await response.json();
-    appointments.forEach(displayAppointment);
+    appointments.forEach(addAppointmentToList); // Populate existing appointments
 }
 
-// Function to display a single appointment
-function displayAppointment(appointment) {
-    const appointmentsList = document.getElementById('appointmentsList');
+function addAppointmentToList(appointment) {
     const li = document.createElement('li');
-    li.textContent = `${appointment.name} - ${appointment.service} on ${appointment.date} at ${appointment.time}`;
-    appointmentsList.appendChild(li);
+    li.textContent = `ID: ${appointment.id} - ${appointment.name} - ${appointment.service} on ${appointment.date} at ${appointment.time}`;
+    document.getElementById('appointments-list').appendChild(li);
 }
 
-// Fetch appointments on page load
-fetchAppointments();
+loadAppointments(); // Load existing appointments on page load
