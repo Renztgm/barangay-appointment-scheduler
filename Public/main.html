@@ -7,18 +7,33 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Barangay Appointment Scheduler</h1>
-        <form id="appointmentForm">
-            <input type="text" id="name" placeholder="Name" required>
-            <input type="text" id="service" placeholder="Service" required>
-            <input type="date" id="date" required>
-            <input type="time" id="time" required>
-            <button type="submit">Schedule Appointment</button>
-        </form>
-        <h2>Appointments</h2>
-        <ul id="appointmentsList"></ul>
+
+    <h1>Barangay Appointment Scheduler</h1>
+    <form id="appointmentForm">
+        <input type="text" id="name" placeholder="Your Name" required>
+        <input type="text" id="service" placeholder="Service Required" required>
+        <input type="date" id="date" required>
+        <input type="time" id="time" required>
+        <button type="submit">Book Appointment</button>
+    </form>
+
+    <div id="appointments">
+        <h2>Scheduled Appointments</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Service</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody id="appointmentList">
+                <!-- Appointments will be populated here -->
+            </tbody>
+        </table>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
