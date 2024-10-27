@@ -1,0 +1,17 @@
+body {
+    background-color: #f8f9fa; /* Light background color */
+}
+
+.card {
+    border-radius: 10px; /* Rounded corners for the card */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+.card-header {
+    border-top-left-radius: 10px; /* Rounded corners for the header */
+    border-top-right-radius: 10px; /* Rounded corners for the header */
+}
+
+.btn {
+    font-size: 16px; /* Increase button font size */
+}

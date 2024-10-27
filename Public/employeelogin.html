@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Login</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="employeelogin.css">
+</head>
+<body>
+
+    <div class="container mt-5">
+        <div class="card mx-auto" style="max-width: 400px;"> <!-- Set max-width for the card -->
+            <div class="card-header text-center bg-primary text-white">
+                <h2>Employee Login</h2>
+            </div>
+            <div class="card-body">
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" id="username" placeholder="Enter your username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Login</button>
+                    <div id="response-message" class="mt-2"></div>
+                </form>
+            </div>
+            <div class="card-footer text-center">
+                <small>&copy; 2024 Your Company Name</small>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script>
+        // Handle form submission
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Simulate login logic
+            if (username === "employee" && password === "password123") { // Update password as needed
+                document.getElementById('response-message').textContent = 'Login successful!';
+                document.getElementById('response-message').style.color = 'green';
+                // Redirect or perform other actions here
+                window.location.href = 'employeedashboard.html'; // Example redirect to the dashboard
+            } else {
+                document.getElementById('response-message').textContent = 'Invalid username or password.';
+                document.getElementById('response-message').style.color = 'red';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+body {
+    background-color: #f8f9fa; /* Light background color */
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    height: 100%;
+    padding: 48px 0 0; /* Adjust padding to make space for the header */
+}
+
+.sidebar .nav-link {
+    font-weight: 500;
+    color: #333;
+}
+
+.sidebar .nav-link:hover {
+    color: #007bff;
+}
+
+.main-content {
+    margin-left: 200px; /* Space for the sidebar */
+    padding: 20px;
+}
+
+h1.h2 {
+    font-size: 24px;
+}
+
+.table {
+    margin-top: 20px; /* Add space between the heading and table */
+}
