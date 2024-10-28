@@ -1,88 +1,128 @@
-// script.js
+document.addEventListener('DOMContentLoaded', () => {
+    const timeslotTable = document.getElementById('timeslot-table');
+    const dateHeader = document.getElementById('date-header');
+    const timeSlots = document.getElementById('time-slots');
+    const weekRange = document.getElementById('week-range');
+    const prevWeekButton = document.getElementById('prev-week');
+    const nextWeekButton = document.getElementById('next-week');
+    const confirmationModal = document.getElementById('confirmation-modal');
+    const confirmationDetails = document.getElementById('confirmation-details');
+    const confirmAppointmentButton = document.getElementById('confirm-appointment');
+    const cancelConfirmationButton = document.getElementById('cancel-confirmation');
 
-// Function to generate time slots and date headers
-function generateTimeSlots() {
-    const timeSlotsBody = document.getElementById('time-slots-body');
-    const dateHeaders = document.getElementById('date-headers');
-
-    const timeSlots = [
-        "8:00-9:00", "9:00-10:00", "10:00-11:00", "11:00-12:00",
-        "1:00-2:00", "2:00-3:00", "3:00-4:00", "4:00-5:00"
+    const timeslots = [
+        '8:00-9:00', '9:00-10:00', '10:00-11:00', '11:00-12:00',
+        '1:00-2:00', '2:00-3:00', '3:00-4:00', '4:00-5:00'
     ];
 
-    // Generate date headers for the current date and the next four days
-    const currentDate = new Date();
-    for (let i = 0; i < 5; i++) {
-        const date = new Date(currentDate);
-        date.setDate(currentDate.getDate() + i);
-        const options = { month: 'short', day: 'numeric', year: 'numeric' };
-        const dateString = date.toLocaleDateString('en-US', options).toUpperCase();
-        const th = document.createElement('th');
-        th.textContent = dateString; // Set the date as header text
-        dateHeaders.appendChild(th);
+    let currentWeekStart = new Date();
+
+    function getMonday(d) {
+        d = new Date(d);
+        const day = d.getDay();
+        const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+        return new Date(d.setDate(diff));
     }
 
-    // Create a row for each time slot
-    timeSlots.forEach(slot => {
-        const row = document.createElement('tr');
+    function formatDate(date) {
+        const options = { month: 'short', day: '2-digit', year: 'numeric' };
+        return date.toLocaleDateString(undefined, options);
+    }
 
-        // Create cells for each day of the week with button boxes
-        for (let day = 1; day <= 5; day++) {
-            const cell = document.createElement('td');
-            const button = document.createElement('button');
-            button.textContent = slot; // Embed the time slot text on the button
-            button.className = 'time-button'; // Add a class for styling if needed
+    function updateWeekTable() {
+        const monday = getMonday(currentWeekStart);
+        dateHeader.innerHTML = '';
+        timeSlots.innerHTML = '';
 
-            // Add click event to store the selected time and day
-            button.addEventListener('click', () => {
-                // Remove highlight from all buttons
-                const allButtons = document.querySelectorAll('.time-button');
-                allButtons.forEach(btn => btn.classList.remove('selected'));
+        const friday = new Date(monday);
+        friday.setDate(friday.getDate() + 4);
+        weekRange.textContent = `${formatDate(monday)} - ${formatDate(friday)}`;
 
-                // Highlight the selected button
-                button.classList.add('selected');
-
-                // Get input values
-                const name = document.getElementById('name').value;
-                const service = document.getElementById('service').value;
-                const phone = document.getElementById('phone').value;
-                const email = document.getElementById('email').value;
-
-                // Send the appointment details to the server
-                fetch('http://localhost:5000/api/appointments', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        name,
-                        service,
-                        date: dateHeaders.children[day - 1].textContent, // Date from header
-                        time: slot,
-                        phone,
-                        email
-                    }),
-                })
-                .then(response => {
-                    if (!response.ok) throw new Error('Network response was not ok');
-                    return response.json();
-                })
-                .then(data => {
-                    document.getElementById('response-message').textContent = `Appointment scheduled: ${data.name} for ${data.service} on ${data.date} at ${data.time}. Phone: ${data.number}, Email: ${data.email}`;
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    document.getElementById('response-message').textContent = 'Failed to schedule appointment.';
-                });
-            });
-
-            cell.appendChild(button); // Add button to the cell
-            row.appendChild(cell); // Add cell to the row
+        for (let i = 0; i < 5; i++) {
+            const date = new Date(monday);
+            date.setDate(monday.getDate() + i);
+            const th = document.createElement('th');
+            th.textContent = `${formatDate(date)}`;
+            dateHeader.appendChild(th);
         }
 
-        timeSlotsBody.appendChild(row); // Append the row to the table body
-    });
-}
+        timeslots.forEach(slot => {
+            const row = document.createElement('tr');
+            for (let i = 0; i < 5; i++) {
+                const td = document.createElement('td');
+                const button = document.createElement('button');
+                button.textContent = slot;
+                button.className = 'timeslot-button';
+                button.dataset.time = slot;
 
-// Call the function to generate time slots when the document loads
-document.addEventListener('DOMContentLoaded', generateTimeSlots);
+                button.addEventListener('click', () => {
+                    document.querySelectorAll('.timeslot-button').forEach(btn => btn.classList.remove('selected'));
+                    button.classList.add('selected');
+                    showConfirmationModal(button.dataset.time);
+                });
+
+                td.appendChild(button);
+                row.appendChild(td);
+            }
+            timeSlots.appendChild(row);
+        });
+    }
+
+    function showConfirmationModal(time) {
+        confirmationDetails.textContent = `Appointment scheduled at ${time}.`;
+        confirmationModal.style.display = 'block';
+        confirmAppointmentButton.dataset.time = time; // Store the time in the button
+    }
+
+    function hideConfirmationModal() {
+        confirmationModal.style.display = 'none';
+    }
+
+    prevWeekButton.addEventListener('click', () => {
+        currentWeekStart.setDate(currentWeekStart.getDate() - 7);
+        updateWeekTable();
+    });
+
+    nextWeekButton.addEventListener('click', () => {
+        currentWeekStart.setDate(currentWeekStart.getDate() + 7);
+        updateWeekTable();
+    });
+
+    confirmAppointmentButton.addEventListener('click', () => {
+        const selectedButton = document.querySelector('.timeslot-button.selected');
+        const time = selectedButton.dataset.time;
+
+        const appointmentData = {
+            name: 'John Doe',
+            service: 'Consultation',
+            time: time,
+            phone: '1234567890',
+            email: 'john@example.com'
+        };
+
+        fetch('http://localhost:5000/api/appointments', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(appointmentData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to submit appointment.');
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert('Appointment confirmed at ' + data.time);
+            hideConfirmationModal();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+
+    cancelConfirmationButton.addEventListener('click', hideConfirmationModal);
+
+    updateWeekTable();
+});

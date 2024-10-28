@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const confirmAppointmentButton = document.getElementById('confirm-appointment');
     const cancelConfirmationButton = document.getElementById('cancel-confirmation');
     const form = document.getElementById('form');
+    const confirmedAppointmentsList = document.getElementById('confirmed-appointments-list');
 
     // Array of time slots
     const timeslots = [
@@ -63,7 +64,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 button.textContent = slot;
                 button.className = 'timeslot-button';
                 button.dataset.time = slot;
-                button.dataset.date = new Date(monday).setDate(monday.getDate() + i);
+
+                // Calculate and store the actual date as a formatted string
+                const currentDate = new Date(monday);
+                currentDate.setDate(monday.getDate() + i);
+                button.dataset.date = formatDate(currentDate); // Store as formatted date string
 
                 // Event listener to highlight the selected slot
                 button.addEventListener('click', () => {
@@ -83,8 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Show the confirmation modal
     function showConfirmationModal(date, time) {
-        const selectedDateObj = new Date(parseInt(date));
-        confirmationDetails.textContent = `Appointment scheduled on ${formatDate(selectedDateObj)} at ${time}.`;
+        confirmationDetails.textContent = `Appointment scheduled on ${date} at ${time}.`;
         confirmationModal.style.display = 'block';
     }
 
@@ -138,11 +142,29 @@ document.addEventListener('DOMContentLoaded', () => {
             hideConfirmationModal(); // Hide the modal after confirming
             form.reset(); // Optionally reset the form here
             updateWeekTable(); // Refresh the week table if needed
+
+            // Display the confirmed appointment details
+            displayConfirmedAppointment(appointmentData);
         } catch (error) {
             console.error(error); // Log the error to console
             alert(error.message); // Show the error message to the user
         }
     });
+
+    // Display the confirmed appointment details
+    function displayConfirmedAppointment(appointmentData) {
+        const appointmentDiv = document.createElement('div');
+        appointmentDiv.classList.add('appointment-item');
+        appointmentDiv.innerHTML = `
+            <strong>Name:</strong> ${appointmentData.name}<br>
+            <strong>Service:</strong> ${appointmentData.service}<br>
+            <strong>Date:</strong> ${appointmentData.date}<br>
+            <strong>Time:</strong> ${appointmentData.time}<br>
+            <strong>Phone:</strong> ${appointmentData.phone}<br>
+            <strong>Email:</strong> ${appointmentData.email}<br>
+        `;
+        confirmedAppointmentsList.appendChild(appointmentDiv);
+    }
 
     // Cancel confirmation
     cancelConfirmationButton.addEventListener('click', hideConfirmationModal);
